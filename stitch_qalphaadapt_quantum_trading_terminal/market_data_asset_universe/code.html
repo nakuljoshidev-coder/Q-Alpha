@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QAlphaAdapt - Market Data</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#303037",
+                    "on-primary-fixed-variant": "#5516be",
+                    "surface-container-highest": "#34343c",
+                    "inverse-surface": "#e4e1eb",
+                    "surface-bright": "#393840",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "on-secondary": "#003640",
+                    "on-secondary-container": "#00424e",
+                    "surface-container-lowest": "#0e0e14",
+                    "on-tertiary": "#003824",
+                    "on-primary-fixed": "#23005c",
+                    "error": "#ffb4ab",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#00311f",
+                    "surface-dim": "#13131a",
+                    "secondary-fixed": "#acedff",
+                    "on-error": "#690005",
+                    "secondary": "#4cd7f6",
+                    "outline": "#958ea0",
+                    "surface-container": "#1f1f26",
+                    "outline-variant": "#494454",
+                    "primary": "#d0bcff",
+                    "secondary-container": "#03b5d3",
+                    "tertiary-container": "#00a572",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "primary-fixed": "#e9ddff",
+                    "inverse-primary": "#6d3bd7",
+                    "surface-container-low": "#1b1b22",
+                    "on-primary-container": "#340080",
+                    "surface-tint": "#d0bcff",
+                    "background": "#13131a",
+                    "on-error-container": "#ffdad6",
+                    "on-background": "#e4e1eb",
+                    "primary-container": "#a078ff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-surface-variant": "#cbc3d7",
+                    "on-secondary-fixed": "#001f26",
+                    "primary-fixed-dim": "#d0bcff",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "on-primary": "#3c0091",
+                    "surface": "#13131a",
+                    "on-surface": "#e4e1eb",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "tertiary": "#4edea3",
+                    "on-tertiary-fixed": "#002113",
+                    "surface-variant": "#34343c",
+                    "surface-container-high": "#2a2931"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "margin-sm": "12px",
+                    "margin-md": "24px",
+                    "container-max": "100%",
+                    "unit": "4px",
+                    "density": "compact"
+            },
+            "fontFamily": {
+                    "body-reg": ["Inter"],
+                    "data-lg": ["JetBrains Mono"],
+                    "data-sm": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-caps": ["Inter"]
+            },
+            "fontSize": {
+                    "body-reg": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "data-lg": ["18px", {"lineHeight": "24px", "fontWeight": "500"}],
+                    "data-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(17, 17, 24, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--color-surface-variant, #34343c);
+        }
+        .glass-panel:hover {
+            border-color: var(--color-primary-container, #a078ff);
+            box-shadow: 0 0 4px rgba(139, 92, 246, 0.3);
+        }
+        .data-grid-row {
+            border-bottom: 1px solid var(--color-surface-variant, #34343c);
+        }
+        .text-up { color: var(--color-tertiary-container, #00a572); }
+        .text-down { color: var(--color-error, #ffb4ab); }
+        
+        /* Custom scrollbar for dense data areas */
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-surface-container-lowest, #0e0e14);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-outline-variant, #494454);
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-outline, #958ea0);
+        }
+    </style>
+</head>
+<body class="bg-[#0a0a0f] text-on-surface font-body-reg antialiased min-h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-gutter h-16 w-full">
+<div class="flex items-center gap-6">
+<div class="font-display-lg text-[24px] font-bold tracking-tighter text-primary flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 28px;">stream</span>
+                QUANTUM-TRADER
+            </div>
+<div class="hidden md:flex gap-6 font-data-sm text-data-sm">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Portfolio</a>
+<a class="text-primary border-b-2 border-primary pb-1 cursor-pointer active:opacity-70" href="#">Market</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Optimize</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Circuit</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Insights</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Advantage</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Simulator</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors duration-200">account_circle</span>
+</div>
+</nav>
+<!-- Live Quote Ticker -->
+<div class="mt-16 w-full bg-[#111118] border-b border-surface-variant h-8 flex items-center overflow-hidden whitespace-nowrap px-gutter font-data-sm text-data-sm">
+<div class="animate-[marquee_20s_linear_infinite] inline-block">
+<span class="mx-4"><span class="text-on-surface-variant">BTC/USD</span> <span class="text-up ml-2">64,231.50 ▲</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">ETH/USD</span> <span class="text-down ml-2">3,450.21 ▼</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">QNT/USD</span> <span class="text-up ml-2">124.80 ▲</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">SOL/USD</span> <span class="text-up ml-2">145.60 ▲</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">ADA/USD</span> <span class="text-down ml-2">0.45 ▼</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">DOT/USD</span> <span class="text-up ml-2">7.20 ▲</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">LINK/USD</span> <span class="text-down ml-2">14.10 ▼</span></span>
+<span class="mx-4"><span class="text-on-surface-variant">AVAX/USD</span> <span class="text-up ml-2">35.40 ▲</span></span>
+</div>
+<style>
+            @keyframes marquee {
+                0% { transform: translateX(100%); }
+                100% { transform: translateX(-100%); }
+            }
+        </style>
+</div>
+<!-- Main Terminal Area -->
+<main class="flex-1 p-margin-sm md:p-gutter flex flex-col md:flex-row gap-gutter overflow-hidden h-[calc(100vh-6rem)]">
+<!-- Left Panel: Asset Universe Picker -->
+<aside class="glass-panel w-full md:w-80 rounded-lg flex flex-col overflow-hidden shrink-0">
+<div class="bg-[#111118] p-3 border-b border-surface-variant">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Asset Universe</h2>
+<div class="mt-2 relative">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-outline-variant text-[16px]">search</span>
+<input class="w-full bg-[#0a0a0f] border border-surface-variant rounded focus:border-secondary focus:ring-1 focus:ring-secondary focus:outline-none pl-8 pr-2 py-1 font-data-sm text-data-sm text-on-surface placeholder:text-outline-variant" placeholder="Filter Assets..." type="text"/>
+</div>
+<div class="flex gap-2 mt-2">
+<button class="bg-primary/20 text-primary border border-primary/50 px-2 py-0.5 rounded text-[10px] font-data-sm">Crypto</button>
+<button class="border border-surface-variant text-on-surface-variant hover:text-on-surface px-2 py-0.5 rounded text-[10px] font-data-sm">Equities</button>
+<button class="border border-surface-variant text-on-surface-variant hover:text-on-surface px-2 py-0.5 rounded text-[10px] font-data-sm">FX</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-2">
+<table class="w-full text-left font-data-sm text-data-sm border-collapse">
+<thead class="bg-[#111118] sticky top-0 z-10">
+<tr>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant">Symbol</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant text-right">Price</th>
+<th class="p-2 font-label-caps text-label-caps text-on-surface-variant text-right">24h</th>
+</tr>
+</thead>
+<tbody>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer">
+<td class="p-2 flex items-center gap-2"><input checked="" class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>BTC</span></td>
+<td class="p-2 text-right">64,231.50</td>
+<td class="p-2 text-right text-up">+2.4%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer">
+<td class="p-2 flex items-center gap-2"><input checked="" class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>ETH</span></td>
+<td class="p-2 text-right">3,450.21</td>
+<td class="p-2 text-right text-down">-1.2%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer">
+<td class="p-2 flex items-center gap-2"><input checked="" class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>SOL</span></td>
+<td class="p-2 text-right">145.60</td>
+<td class="p-2 text-right text-up">+5.8%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer">
+<td class="p-2 flex items-center gap-2"><input checked="" class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>ADA</span></td>
+<td class="p-2 text-right">0.45</td>
+<td class="p-2 text-right text-down">-0.5%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer">
+<td class="p-2 flex items-center gap-2"><input checked="" class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>DOT</span></td>
+<td class="p-2 text-right">7.20</td>
+<td class="p-2 text-right text-up">+1.1%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer opacity-50">
+<td class="p-2 flex items-center gap-2"><input class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>LINK</span></td>
+<td class="p-2 text-right">14.10</td>
+<td class="p-2 text-right text-down">-2.3%</td>
+</tr>
+<tr class="data-grid-row hover:bg-surface-container-low cursor-pointer opacity-50">
+<td class="p-2 flex items-center gap-2"><input class="rounded border-surface-variant bg-[#0a0a0f] text-primary focus:ring-primary h-3 w-3" type="checkbox"/> <span>AVAX</span></td>
+<td class="p-2 text-right">35.40</td>
+<td class="p-2 text-right text-up">+4.2%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-3 bg-[#111118] border-t border-surface-variant flex justify-between items-center">
+<span class="font-data-sm text-[10px] text-on-surface-variant">5 Selected</span>
+<button class="bg-primary text-on-primary px-3 py-1 rounded font-label-caps text-[10px] hover:bg-primary-container transition-colors">UPDATE MATRIX</button>
+</div>
+</aside>
+<!-- Right Panel: Correlation Matrix & details -->
+<div class="flex-1 flex flex-col gap-gutter overflow-hidden">
+<!-- Matrix Visualization -->
+<section class="glass-panel rounded-lg flex-1 flex flex-col overflow-hidden relative">
+<!-- Atmospheric background element -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none"></div>
+<div class="bg-[#111118] p-3 border-b border-surface-variant flex justify-between items-center z-10">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">grid_on</span>
+                        Covariance / Correlation Matrix (Pearson)
+                    </h2>
+<div class="flex gap-2">
+<select class="bg-[#0a0a0f] border border-surface-variant rounded text-[10px] font-data-sm text-on-surface px-2 py-1 focus:outline-none focus:border-secondary">
+<option>1h timeframe</option>
+<option>4h timeframe</option>
+<option>1D timeframe</option>
+</select>
+<button class="border border-surface-variant p-1 rounded hover:bg-surface-container"><span class="material-symbols-outlined text-[14px]">download</span></button>
+</div>
+</div>
+<div class="flex-1 p-4 overflow-auto relative z-10 flex items-center justify-center">
+<!-- Simplified CSS Heatmap representation -->
+<div class="grid grid-cols-6 gap-[1px] bg-surface-variant border border-surface-variant font-data-sm text-[10px] max-w-full">
+<!-- Header Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold"></div>
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">BTC</div>
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">ETH</div>
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">SOL</div>
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">ADA</div>
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">DOT</div>
+<!-- BTC Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">BTC</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.9);">1.00</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.7);">0.85</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.5);">0.62</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.71</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.4);">0.55</div>
+<!-- ETH Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">ETH</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.7);">0.85</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.9);">1.00</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.75</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.5);">0.68</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.72</div>
+<!-- SOL Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">SOL</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.5);">0.62</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.75</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.9);">1.00</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(255, 180, 171, 0.2);">-0.15</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.3);">0.42</div>
+<!-- ADA Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">ADA</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.71</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.5);">0.68</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(255, 180, 171, 0.2);">-0.15</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.9);">1.00</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.4);">0.51</div>
+<!-- DOT Row -->
+<div class="bg-[#111118] p-2 flex items-center justify-center text-on-surface-variant font-bold">DOT</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.4);">0.55</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.6);">0.72</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.3);">0.42</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.4);">0.51</div>
+<div class="bg-[#0a0a0f] text-on-surface p-2 flex items-center justify-center" style="background-color: rgba(0, 165, 114, 0.9);">1.00</div>
+</div>
+</div>
+<!-- Legend -->
+<div class="p-2 border-t border-surface-variant flex justify-end items-center gap-4 text-[10px] font-data-sm">
+<span class="text-on-surface-variant">Correlation:</span>
+<div class="flex items-center gap-1">
+<span>-1.0</span>
+<div class="h-2 w-24 bg-gradient-to-r from-error via-surface to-tertiary-container rounded-sm"></div>
+<span>+1.0</span>
+</div>
+</div>
+</section>
+<!-- Bottom Stats Row -->
+<div class="flex gap-gutter h-32 shrink-0">
+<div class="glass-panel rounded-lg flex-1 p-3 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant">Highest Correlation Pair</span>
+<div>
+<div class="font-data-lg text-primary">BTC / ETH</div>
+<div class="font-data-sm text-tertiary-container mt-1">Pearson: 0.85</div>
+</div>
+</div>
+<div class="glass-panel rounded-lg flex-1 p-3 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant">Lowest Correlation Pair</span>
+<div>
+<div class="font-data-lg text-secondary">SOL / ADA</div>
+<div class="font-data-sm text-error mt-1">Pearson: -0.15</div>
+</div>
+</div>
+<div class="glass-panel rounded-lg flex-1 p-3 flex flex-col justify-between">
+<span class="font-label-caps text-[10px] text-on-surface-variant">System Status</span>
+<div class="flex items-center gap-2">
+<div class="h-2 w-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="font-data-sm text-on-surface">Matrix Live</span>
+</div>
+<span class="font-data-sm text-[10px] text-outline mt-1">Latency: 12ms</span>
+</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar (Floating Action style for terminal tools) -->
+<div class="fixed bottom-margin-md right-margin-md z-50 flex items-center gap-2">
+<div class="bg-surface-container/60 backdrop-blur-xl border border-outline-variant/50 shadow-[0_0_15px_rgba(76,215,246,0.2)] rounded-full w-auto flex p-1">
+<button class="bg-secondary text-on-secondary rounded-full px-4 py-2 font-label-caps text-label-caps hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">help</span>
+                GUIDE
+            </button>
+</div>
+</div>
+</body></html>

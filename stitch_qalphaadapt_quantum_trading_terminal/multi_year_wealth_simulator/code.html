@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QAlphaAdapt - Simulator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-on-surface": "#303037",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-container-highest": "#34343c",
+                        "inverse-surface": "#e4e1eb",
+                        "surface-bright": "#393840",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "on-secondary": "#003640",
+                        "on-secondary-container": "#00424e",
+                        "surface-container-lowest": "#0e0e14",
+                        "on-tertiary": "#003824",
+                        "on-primary-fixed": "#23005c",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#00311f",
+                        "surface-dim": "#13131a",
+                        "secondary-fixed": "#acedff",
+                        "on-error": "#690005",
+                        "secondary": "#4cd7f6",
+                        "outline": "#958ea0",
+                        "surface-container": "#1f1f26",
+                        "outline-variant": "#494454",
+                        "primary": "#d0bcff",
+                        "secondary-container": "#03b5d3",
+                        "tertiary-container": "#00a572",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary-fixed": "#e9ddff",
+                        "inverse-primary": "#6d3bd7",
+                        "surface-container-low": "#1b1b22",
+                        "on-primary-container": "#340080",
+                        "surface-tint": "#d0bcff",
+                        "background": "#13131a",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e4e1eb",
+                        "primary-container": "#a078ff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-surface-variant": "#cbc3d7",
+                        "on-secondary-fixed": "#001f26",
+                        "primary-fixed-dim": "#d0bcff",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "on-primary": "#3c0091",
+                        "surface": "#13131a",
+                        "on-surface": "#e4e1eb",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "tertiary": "#4edea3",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-variant": "#34343c",
+                        "surface-container-high": "#2a2931"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "gutter": "16px",
+                        "margin-sm": "12px",
+                        "margin-md": "24px",
+                        "container-max": "100%",
+                        "unit": "4px",
+                        "density": "compact"
+                    },
+                    fontFamily: {
+                        "body-reg": ["Inter"],
+                        "data-lg": ["JetBrains Mono"],
+                        "data-sm": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-reg": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "data-lg": ["18px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "data-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #0a0a0f;
+            color: #e4e1eb;
+        }
+        .glass-panel {
+            background-color: rgba(17, 17, 24, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #1f1f2e;
+        }
+        .interactive-border:hover, .interactive-border:focus-within {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 4px #8b5cf6;
+        }
+        input[type="range"] {
+            accent-color: #8b5cf6;
+        }
+        /* Custom scrollbar for data intensity */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0f; }
+        ::-webkit-scrollbar-thumb { background: #1f1f2e; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #494454; }
+    </style>
+</head>
+<body class="font-body-reg min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 flat no shadows flex justify-between items-center px-gutter h-16 w-full">
+<div class="flex items-center gap-6">
+<div class="font-display-lg text-display-lg font-bold tracking-tighter text-primary !text-[24px] !leading-[32px]">QUANTUM-TRADER</div>
+<div class="hidden md:flex space-x-4">
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Home</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Portfolio</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Market</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Optimize</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Circuit</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Insights</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Advantage</a>
+<a class="font-data-sm text-data-sm text-primary border-b-2 border-primary pb-1 hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Simulator</a>
+</div>
+</div>
+<div>
+<span class="material-symbols-outlined text-primary cursor-pointer active:opacity-70">account_circle</span>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-24 px-gutter pb-margin-md max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Header Section -->
+<header class="lg:col-span-12 mb-margin-sm">
+<h1 class="font-headline-md text-headline-md text-on-surface">QAlphaAdapt</h1>
+<p class="font-body-reg text-body-reg text-on-surface-variant">Multi-Year Wealth Simulator</p>
+</header>
+<!-- Left Column: Controls -->
+<section class="lg:col-span-4 flex flex-col gap-margin-sm">
+<div class="glass-panel interactive-border rounded-lg p-margin-md flex flex-col gap-6">
+<!-- Investment Capital -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Investment Capital</label>
+<span class="font-data-sm text-data-sm text-secondary" id="capitalVal">₹1,00,000</span>
+</div>
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="1000000" min="10000" oninput="document.getElementById('capitalVal').textContent = '₹' + parseInt(this.value).toLocaleString()" step="10000" type="range" value="100000"/>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[10px] text-outline">₹10K</span>
+<span class="font-data-sm text-[10px] text-outline">₹10L</span>
+</div>
+</div>
+<!-- Time Horizon -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Time Horizon</label>
+<span class="font-data-sm text-data-sm text-secondary" id="timeVal">10 Years</span>
+</div>
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="20" min="1" oninput="document.getElementById('timeVal').textContent = this.value + ' Years'" step="1" type="range" value="10"/>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[10px] text-outline">1 YR</span>
+<span class="font-data-sm text-[10px] text-outline">20 YRS</span>
+</div>
+</div>
+<!-- Risk Tolerance -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant uppercase">Risk Tolerance (Volatility %)</label>
+<span class="font-data-sm text-data-sm text-error" id="riskVal">45%</span>
+</div>
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" max="100" min="0" oninput="document.getElementById('riskVal').textContent = this.value + '%'" step="1" type="range" value="45"/>
+<div class="flex justify-between mt-1">
+<span class="font-data-sm text-[10px] text-outline">CONSERVATIVE</span>
+<span class="font-data-sm text-[10px] text-outline">AGGRESSIVE</span>
+</div>
+</div>
+<button class="mt-4 bg-[#8b5cf6] text-white font-label-caps text-label-caps py-2 rounded uppercase tracking-wider hover:bg-[#7c3aed] transition-colors">
+                    Execute Simulation
+                </button>
+</div>
+<!-- SideNavBar equivalent as a generic info module if needed, omitted here to focus on main task -->
+</section>
+<!-- Right Column: Visualization & Summary -->
+<section class="lg:col-span-8 flex flex-col gap-margin-sm">
+<!-- Chart Area -->
+<div class="glass-panel interactive-border rounded-lg p-margin-md flex-grow min-h-[400px] flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-center mb-4 z-10 relative">
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase">Projected Trajectories</h2>
+<div class="flex gap-4">
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-tertiary"></span><span class="font-data-sm text-data-sm text-outline">Best Case</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span><span class="font-data-sm text-data-sm text-outline">Expected</span></div>
+<div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error"></span><span class="font-data-sm text-data-sm text-outline">Stressed</span></div>
+</div>
+</div>
+<!-- Simulated Chart Background using CSS gradients to represent area chart -->
+<div class="absolute inset-0 top-16 bottom-4 left-4 right-4 flex items-end opacity-80 pointer-events-none">
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between border-l border-b border-[#1f1f2e] opacity-50">
+<div class="w-full border-t border-[#1f1f2e]"></div>
+<div class="w-full border-t border-[#1f1f2e]"></div>
+<div class="w-full border-t border-[#1f1f2e]"></div>
+<div class="w-full border-t border-[#1f1f2e]"></div>
+<div class="w-full"></div>
+</div>
+<!-- SVG Chart representation -->
+<svg class="w-full h-full relative z-0" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Best Case (Green) -->
+<path d="M0 100 L 20 80 L 40 60 L 60 40 L 80 20 L 100 5 L 100 100 Z" fill="url(#gradGreen)" opacity="0.2"></path>
+<path d="M0 100 L 20 80 L 40 60 L 60 40 L 80 20 L 100 5" fill="none" stroke="#4edea3" stroke-width="1.5"></path>
+<!-- Expected (Purple) -->
+<path d="M0 100 L 20 85 L 40 70 L 60 55 L 80 40 L 100 25 L 100 100 Z" fill="url(#gradPurple)" opacity="0.3"></path>
+<path d="M0 100 L 20 85 L 40 70 L 60 55 L 80 40 L 100 25" fill="none" stroke="#d0bcff" stroke-width="1.5"></path>
+<!-- Stressed (Red) -->
+<path d="M0 100 L 20 95 L 40 90 L 60 85 L 80 85 L 100 80 L 100 100 Z" fill="url(#gradRed)" opacity="0.1"></path>
+<path d="M0 100 L 20 95 L 40 90 L 60 85 L 80 85 L 100 80" fill="none" stroke="#ffb4ab" stroke-width="1.5"></path>
+<defs>
+<lineargradient id="gradGreen" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4edea3"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+<lineargradient id="gradPurple" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#d0bcff"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+<lineargradient id="gradRed" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ffb4ab"></stop>
+<stop offset="100%" stop-color="transparent"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+<!-- Bottom Summary Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="glass-panel interactive-border rounded-lg p-margin-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Expected Value</span>
+<span class="font-data-lg text-data-lg text-primary mt-2">₹4,25,000</span>
+</div>
+<div class="glass-panel interactive-border rounded-lg p-margin-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Best Case (95%)</span>
+<span class="font-data-lg text-data-lg text-tertiary mt-2">₹8,10,000</span>
+</div>
+<div class="glass-panel interactive-border rounded-lg p-margin-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Worst Case (5%)</span>
+<span class="font-data-lg text-data-lg text-error mt-2">₹1,15,000</span>
+</div>
+<div class="glass-panel interactive-border rounded-lg p-margin-sm flex flex-col justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Volatility Conf.</span>
+<span class="font-data-lg text-data-lg text-secondary mt-2">89.4%</span>
+</div>
+</div>
+</section>
+</main>
+<!-- SideNavBar (Terminal Core Info) -->
+<aside class="fixed bottom-margin-md right-margin-md z-50 flex items-center gap-2">
+<div class="bg-surface-container/60 backdrop-blur-xl border border-outline-variant/50 shadow-[0_0_15px_rgba(76,215,246,0.2)] rounded-full px-4 py-2 flex items-center gap-3 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer">
+<span class="material-symbols-outlined text-secondary font-label-caps text-label-caps">help</span>
+<div class="flex flex-col">
+<span class="font-label-caps text-[9px] text-on-surface-variant uppercase">Terminal Core v4.0.1</span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-wider">Platform Guide</span>
+</div>
+</div>
+</aside>
+</body></html>

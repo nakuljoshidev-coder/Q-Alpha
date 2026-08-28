@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QAlphaAdapt - Advantage &amp; Simulator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-on-surface": "#303037",
+                      "on-primary-fixed-variant": "#5516be",
+                      "surface-container-highest": "#34343c",
+                      "inverse-surface": "#e4e1eb",
+                      "surface-bright": "#393840",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "on-secondary": "#003640",
+                      "on-secondary-container": "#00424e",
+                      "surface-container-lowest": "#0e0e14",
+                      "on-tertiary": "#003824",
+                      "on-primary-fixed": "#23005c",
+                      "error": "#ffb4ab",
+                      "error-container": "#93000a",
+                      "on-tertiary-container": "#00311f",
+                      "surface-dim": "#13131a",
+                      "secondary-fixed": "#acedff",
+                      "on-error": "#690005",
+                      "secondary": "#4cd7f6",
+                      "outline": "#958ea0",
+                      "surface-container": "#1f1f26",
+                      "outline-variant": "#494454",
+                      "primary": "#d0bcff",
+                      "secondary-container": "#03b5d3",
+                      "tertiary-container": "#00a572",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "primary-fixed": "#e9ddff",
+                      "inverse-primary": "#6d3bd7",
+                      "surface-container-low": "#1b1b22",
+                      "on-primary-container": "#340080",
+                      "surface-tint": "#d0bcff",
+                      "background": "#13131a",
+                      "on-error-container": "#ffdad6",
+                      "on-background": "#e4e1eb",
+                      "primary-container": "#a078ff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "on-surface-variant": "#cbc3d7",
+                      "on-secondary-fixed": "#001f26",
+                      "primary-fixed-dim": "#d0bcff",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "on-primary": "#3c0091",
+                      "surface": "#13131a",
+                      "on-surface": "#e4e1eb",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "tertiary": "#4edea3",
+                      "on-tertiary-fixed": "#002113",
+                      "surface-variant": "#34343c",
+                      "surface-container-high": "#2a2931"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "margin-sm": "12px",
+                      "margin-md": "24px",
+                      "container-max": "100%",
+                      "unit": "4px",
+                      "density": "compact"
+              },
+              "fontFamily": {
+                      "body-reg": [
+                              "Inter"
+                      ],
+                      "data-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "data-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-reg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "data-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "data-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #0a0a0f;
+            color: #e4e1eb;
+        }
+        
+        .glass-panel {
+            background: rgba(17, 17, 24, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid #1f1f2e;
+        }
+
+        .glass-panel:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 4px rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .data-value.positive { color: #00a572; }
+        .data-value.negative { color: #ffb4ab; }
+        
+        .recessed-input {
+            background-color: #0a0a0f;
+            border: 1px solid #1f1f2e;
+        }
+        .recessed-input:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 4px rgba(6, 182, 212, 0.3);
+            outline: none;
+        }
+
+        /* Ambient Glow Background */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 15% 15%, rgba(139, 92, 246, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.05) 0%, transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-body-reg antialiased min-h-screen flex flex-col">
+<div class="ambient-glow"></div>
+<!-- TopNavBar (Advantage/Simulator Intent) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 flex justify-between items-center px-gutter h-16 w-full">
+<div class="flex items-center gap-6">
+<span class="font-display-lg text-[24px] font-bold tracking-tighter text-primary leading-none">QUANTUM-TRADER</span>
+<div class="hidden md:flex gap-4">
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Home</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Portfolio</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Market</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Optimize</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Circuit</a>
+<a class="font-data-sm text-data-sm text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Insights</a>
+<a class="font-data-sm text-data-sm text-primary border-b-2 border-primary pb-1 hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Advantage</a>
+<a class="font-data-sm text-data-sm text-primary border-b-2 border-primary pb-1 hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-70" href="#">Simulator</a>
+</div>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined cursor-pointer hover:text-secondary transition-colors duration-200">account_circle</span>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 px-gutter pb-margin-md flex flex-col gap-gutter max-w-[1600px] mx-auto w-full">
+<!-- Header Section -->
+<header class="flex flex-col gap-unit">
+<h1 class="font-headline-md text-headline-md text-on-surface">QAlphaAdapt</h1>
+<p class="font-body-reg text-body-reg text-on-surface-variant">Quantum Advantage &amp; Walk-Forward Backtesting Engine</p>
+</header>
+<!-- Advantage Banner -->
+<section class="glass-panel rounded-lg p-margin-sm flex flex-wrap gap-margin-sm items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-2xl" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<div>
+<h2 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Demonstrated Advantage</h2>
+<div class="flex items-baseline gap-2">
+<span class="font-data-lg text-data-lg text-secondary">+14.2%</span>
+<span class="font-body-reg text-[12px] text-on-surface-variant">Sharpe Improvement (vs Classical)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-margin-md">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Statistical Sig.</span>
+<span class="font-data-sm text-data-sm text-tertiary">p &lt; 0.01</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Polynomial Scaling</span>
+<span class="font-data-sm text-data-sm text-on-surface">O(N^1.5)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Algorithm</span>
+<span class="font-data-sm text-data-sm text-primary-container bg-surface-container-high px-2 py-0.5 rounded font-bold">DC-QAOA</span>
+</div>
+</div>
+</section>
+<!-- Configuration & Chart Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
+<!-- Controls Sidebar -->
+<aside class="glass-panel rounded-lg p-margin-sm flex flex-col gap-margin-sm lg:col-span-1">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant border-b border-outline-variant/30 pb-2 mb-2">Backtest Parameters (2024-2026)</h3>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Test Horizon</label>
+<select class="recessed-input rounded px-3 py-2 font-data-sm text-data-sm text-on-surface w-full appearance-none">
+<option>3 Years (2024-2026)</option>
+<option>1 Year (2025)</option>
+<option>YTD</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Rebalancing Frequency</label>
+<select class="recessed-input rounded px-3 py-2 font-data-sm text-data-sm text-on-surface w-full appearance-none">
+<option>Daily</option>
+<option>Weekly</option>
+<option selected="">Monthly</option>
+<option>Quarterly</option>
+</select>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Constraint Model</label>
+<select class="recessed-input rounded px-3 py-2 font-data-sm text-data-sm text-on-surface w-full appearance-none">
+<option>Relaxed L1</option>
+<option>Strict L0 (Quantum Native)</option>
+<option>Hybrid Penalty</option>
+</select>
+</div>
+<button class="mt-auto bg-[#8b5cf6] text-white font-data-sm text-data-sm py-2 rounded uppercase tracking-wider hover:bg-primary-container transition-colors">Run Simulation</button>
+</aside>
+<!-- Chart Area -->
+<section class="glass-panel rounded-lg p-margin-sm flex flex-col lg:col-span-3 min-h-[400px]">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">Cumulative Performance</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="font-data-sm text-data-sm text-on-surface">Quantum DC-QAOA</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-outline-variant"></div>
+<span class="font-data-sm text-data-sm text-on-surface">Equal-Weight BM</span>
+</div>
+</div>
+</div>
+<!-- Chart Placeholder - Simulated with a CSS gradient pattern for aesthetics without base64 -->
+<div class="flex-grow relative border-b border-l border-outline-variant/30 flex items-end overflow-hidden" style="background: linear-gradient(to right, rgba(139,92,246,0.05), rgba(6,182,212,0.1));">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="w-full border-t border-outline-variant/20 h-0"></div>
+<div class="w-full border-t border-outline-variant/20 h-0"></div>
+<div class="w-full border-t border-outline-variant/20 h-0"></div>
+<div class="w-full border-t border-outline-variant/20 h-0"></div>
+</div>
+<!-- Simulated Data Lines -->
+<svg class="absolute w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Benchmark Line -->
+<path d="M0,80 L20,75 L40,65 L60,70 L80,55 L100,50" fill="none" stroke="#494454" stroke-width="1.5" vector-effect="non-scaling-stroke"></path>
+<!-- Quantum Strategy Line -->
+<path d="M0,80 L20,70 L40,55 L60,45 L80,25 L100,10" fill="none" stroke="#4cd7f6" stroke-width="2" vector-effect="non-scaling-stroke"></path>
+<!-- Area Fill for Quantum -->
+<path d="M0,100 L0,80 L20,70 L40,55 L60,45 L80,25 L100,10 L100,100 Z" fill="rgba(76, 215, 246, 0.1)"></path>
+</svg>
+</div>
+<div class="flex justify-between font-data-sm text-[10px] text-on-surface-variant mt-2 px-1">
+<span>Q1 '24</span>
+<span>Q3 '24</span>
+<span>Q1 '25</span>
+<span>Q3 '25</span>
+<span>Q1 '26</span>
+<span>Q4 '26</span>
+</div>
+</section>
+</div>
+<!-- Metrics Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-margin-sm">
+<div class="glass-panel rounded-lg p-margin-sm flex flex-col justify-between h-24">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Cumulative Return</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-[24px] data-value positive">+42.8%</span>
+<span class="font-data-sm text-[10px] text-outline">BM: +18.4%</span>
+</div>
+</div>
+<div class="glass-panel rounded-lg p-margin-sm flex flex-col justify-between h-24">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Alpha (Ann.)</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-[24px] data-value positive">+8.15%</span>
+<span class="font-data-sm text-[10px] text-outline">Risk-Adj</span>
+</div>
+</div>
+<div class="glass-panel rounded-lg p-margin-sm flex flex-col justify-between h-24">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Quantum Sharpe</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-[24px] text-primary">2.41</span>
+<span class="font-data-sm text-[10px] text-outline">Rf: 4.5%</span>
+</div>
+</div>
+<div class="glass-panel rounded-lg p-margin-sm flex flex-col justify-between h-24">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Max Drawdown</span>
+<div class="flex items-end justify-between">
+<span class="font-data-lg text-[24px] data-value negative">-6.2%</span>
+<span class="font-data-sm text-[10px] text-outline">BM: -14.8%</span>
+</div>
+</div>
+</section>
+</main>
+<!-- SideNavBar (Terminal Core Utility) -->
+<div class="fixed bottom-margin-md right-margin-md rounded-full w-auto bg-surface-container/60 backdrop-blur-xl border border-outline-variant/50 shadow-[0_0_15px_rgba(76,215,246,0.2)] fixed bottom-6 right-6 z-50 flex items-center gap-2">
+<div class="flex items-center gap-2 p-1">
+<button class="bg-secondary text-on-secondary rounded-full px-4 py-2 font-label-caps text-label-caps flex items-center gap-2 hover:scale-105 active:scale-95 transition-all duration-300">
+<span class="material-symbols-outlined text-[16px]">help</span>
+                Platform Guide
+            </button>
+</div>
+</div>
+</body></html>
