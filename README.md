@@ -7,7 +7,6 @@ A hackathon-grade quantum-classical hybrid application that leverages **True DC-
 
 Comparable to institutional-grade tools, this prototype demonstrates **Quantum Advantage** in the NISQ (Noisy Intermediate-Scale Quantum) era by stabilizing solution entropy and minimizing energy variance.
 
----
 
 ## 🚀 Key Features
 
