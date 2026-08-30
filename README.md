@@ -58,7 +58,7 @@ Comparable to institutional-grade tools, this prototype demonstrates **Quantum A
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/sagar25k/Quantum-Portfolio-Optimization-With-DC-QAOA.git
+git clone https://github.com/nakuljoshidev-coder/Q-Alpha
 cd Quantum-Portfolio-Optimization-With-DC-QAOA
 ```
 
@@ -103,6 +103,3 @@ Standard QAOA suffers from barren plateaus and local minima. Our implementation 
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
