@@ -1,6 +1,4 @@
 # ⚛️ Quantum Portfolio Optimization with DC-QAOA
-
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![React](https://img.shields.io/badge/react-18.0%2B-cyan)
 ![Qiskit](https://img.shields.io/badge/qiskit-1.0%2B-purple)
